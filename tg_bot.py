@@ -128,7 +128,7 @@ def main():
                 MessageHandler(Filters.text & ~Filters.command, handle_solution_attempt)
             ]
         },
-        fallbacks=[]
+        fallbacks=[CommandHandler('start', start)],
     )
 
     dp.add_handler(conv_handler)
