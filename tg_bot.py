@@ -21,7 +21,10 @@ logger = logging.getLogger(__file__)
 NEW_QUESTION, ANSWER_ATTEMPT = range(2)
 
 def start(update, context):
-    questions = context.bot_data['questions']
+    redis_connect = context.bot_data['redis']
+    user_id = update.effective_user.id
+
+    redis_connect.delete(f'tg-quiz:{user_id}:answer')
     buttons = [['Новый вопрос', 'Сдаться'], ['Мой счёт']]
     reply_markup = ReplyKeyboardMarkup(buttons, resize_keyboard=True)
     
