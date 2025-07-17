@@ -23,7 +23,7 @@ def create_bot_functions(vk_api_client, redis_connect, questions):
         keyboard.add_button('Мой счёт', color=VkKeyboardColor.SECONDARY)
         return keyboard.get_keyboard()
 
-    def send_message(user_id: int, text: str):
+    def send_message(user_id, text):
         vk_api_client.messages.send(
             user_id=user_id,
             message=text,
@@ -103,7 +103,9 @@ def main():
                 user_id = event.user_id
                 text = event.text
                 
-                if text == 'Новый вопрос':
+                if text.lower() == 'начать' or text.lower() == 'start':
+                    handlers['send_message'](user_id, 'Привет! Я бот для викторины. Нажми "Новый вопрос" чтобы начать.')
+                elif text == 'Новый вопрос':
                     handlers['handle_new_question'](user_id)
                 elif text == 'Сдаться':
                     handlers['handle_give_up'](user_id)
