@@ -16,9 +16,12 @@ from telegram.ext import (
 
 from quiz_questions_loader import load_all_questions
 
+
 logger = logging.getLogger(__file__)
 
+
 NEW_QUESTION, ANSWER_ATTEMPT = range(2)
+
 
 def start(update, context):
     redis_connect = context.bot_data['redis']
@@ -34,6 +37,7 @@ def start(update, context):
     )
     return NEW_QUESTION
 
+
 def handle_new_question_request(update, context):
     questions = context.bot_data['questions']
     redis_connect = context.bot_data['redis']
@@ -43,6 +47,7 @@ def handle_new_question_request(update, context):
     redis_connect.set(f'tg-quiz:{user_id}:current_question', question)
     update.message.reply_text(f'Вопрос:\n{question}')
     return ANSWER_ATTEMPT
+
 
 def handle_solution_attempt(update, context):
     redis_connect = context.bot_data['redis']
@@ -71,6 +76,7 @@ def handle_solution_attempt(update, context):
         update.message.reply_text('Неправильно. Попробуйте ещё раз')
         return ANSWER_ATTEMPT
 
+
 def handle_give_up(update, context):
     redis_connect = context.bot_data['redis']
     questions = context.bot_data['questions']
@@ -83,6 +89,7 @@ def handle_give_up(update, context):
     
     return handle_new_question_request(update, context)
 
+
 def handle_show_score(update, context):
     redis_connect = context.bot_data['redis']
     user_id = update.message.from_user.id
@@ -90,6 +97,7 @@ def handle_show_score(update, context):
     score = redis_connect.get(f'tg-quiz:{user_id}:score') or '0'
     update.message.reply_text(f'Ваш текущий счёт: {score}')
     return ANSWER_ATTEMPT
+
 
 def main():
     logging.basicConfig(
@@ -134,6 +142,7 @@ def main():
     dp.add_handler(conv_handler)
     updater.start_polling()
     updater.idle()
+
 
 if __name__ == '__main__':
     main()

@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 
 def parse_quiz_file(file_path):
@@ -11,23 +12,26 @@ def parse_quiz_file(file_path):
     current_question = None
 
     for block in blocks:
+        if not (block.startswith('Вопрос') or block.startswith('Ответ')):
+            continue
+
         if block.startswith('Вопрос'):
             current_question = block.split(':', 1)[1].strip()
-        elif block.startswith('Ответ'):
-            if current_question:
-                answer = block.split(':', 1)[1].strip()
-                questions[current_question] = answer
+            continue
+
+        if not current_question:
+            continue
 
     return questions
 
 
-def load_all_questions():
+def load_all_questions(questions_dir=None):
     all_questions = {}
-    questions_dir = './quiz-questions'
+    base_dir = Path(questions_dir or os.getenv('QUESTIONS_DIR', './quiz-questions'))
 
-    for filename in os.listdir(questions_dir):
+    for filename in os.listdir(base_dir):
         if filename.endswith('.txt'):
-            file_path = os.path.join(questions_dir, filename)
+            file_path = os.path.join(base_dir, filename)
             all_questions.update(parse_quiz_file(file_path))
 
     return all_questions
