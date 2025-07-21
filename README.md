@@ -41,6 +41,7 @@ pip install -r requirements.txt
 ```
 VK_GROUP_TOKEN=your_vk_group_token
 TG_BOT_TOKEN=your_telegram_bot_token
+QUESTIONS_DIR=your_directory_with_questions
 REDIS_HOST=your_redis_db_host
 REDIS_PORT=your_redis_db_port
 REDIS_PASSWORD=your_redis_password
@@ -57,7 +58,7 @@ REDIS_PASSWORD=your_redis_password
 
 ### 4. Добавьте файлы с вопросами и ответами.
 
-Создайте директорию `quiz-questions` в корневой папке проекта, в которой должны находиться текстовые файлы с вопросами и ответами. 
+По умолчанию указана `quiz-questions` в корневой папке проекта, в которой должны находиться текстовые файлы с вопросами и ответами, но вы можете длбавить свой путь до директории в .env файл. 
 
 Пример содержимого файла с вопросами:
 ```text
