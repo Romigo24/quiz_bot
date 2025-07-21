@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 
@@ -27,11 +26,7 @@ def parse_quiz_file(file_path):
 
 def load_all_questions(questions_dir=None):
     all_questions = {}
-    base_dir = Path(questions_dir or os.getenv('QUESTIONS_DIR', './quiz-questions'))
-
-    for filename in os.listdir(base_dir):
-        if filename.endswith('.txt'):
-            file_path = os.path.join(base_dir, filename)
-            all_questions.update(parse_quiz_file(file_path))
+    for file_path in questions_dir.glob('*.txt'):
+        all_questions.update(parse_quiz_file(file_path))
 
     return all_questions

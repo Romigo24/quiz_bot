@@ -1,6 +1,7 @@
 import os
 import random
 import logging
+from pathlib import Path
 
 import redis
 from dotenv import load_dotenv
@@ -74,7 +75,8 @@ def main():
 
     try:
         load_dotenv()
-        questions = load_all_questions()
+        questions_dir = Path(os.getenv('QUESTIONS_DIR', 'quiz-questions')).absolute()
+        questions = load_all_questions(questions_dir)
         if not questions:
             logger.error("Не загружено ни одного вопроса!")
             return
@@ -92,21 +94,6 @@ def main():
         longpoll = VkLongPoll(vk_session)
 
         logger.info("Бот-викторина запущен...")
-        # for event in longpoll.listen():
-        #     if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-        #         user_id = event.user_id
-        #         text = event.text
-                
-        #         if text.lower() in ('начать', 'start'):
-        #             send_message(vk, user_id, 'Привет! Я бот для викторины. Нажми "Новый вопрос" чтобы начать.')
-        #         elif text == 'Новый вопрос':
-        #             handle_new_question(vk, redis_connect, questions, user_id)
-        #         elif text == 'Сдаться':
-        #             handle_give_up(vk, redis_connect, questions, user_id)
-        #         elif text == 'Мой счёт':
-        #             handle_score(vk, redis_connect, user_id)
-        #         else:
-        #             handle_answer(vk, redis_connect, questions, user_id, text)
         for event in longpoll.listen():
             if not (event.type == VkEventType.MESSAGE_NEW and event.to_me):
                 continue

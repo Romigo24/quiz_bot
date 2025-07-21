@@ -1,6 +1,7 @@
 import os
 import random
 import logging
+from pathlib import Path
 
 import redis
 from dotenv import load_dotenv
@@ -113,7 +114,8 @@ def main():
         decode_responses=True
     )
 
-    questions = load_all_questions()
+    questions_dir = Path(os.getenv('QUESTIONS_DIR', 'quiz-questions')).absolute()
+    questions = load_all_questions(questions_dir)
     if not questions:
         logger.error("Не загружено ни одного вопроса!")
         return
